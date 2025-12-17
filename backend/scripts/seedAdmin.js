@@ -7,7 +7,7 @@ dotenv.config();
 
 const seedAdmin = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/course");
+    await mongoose.connect("mongodb://localhost:27017/course_inquiry");
     console.log('MongoDB connected');
 
     await Admin.deleteMany({});

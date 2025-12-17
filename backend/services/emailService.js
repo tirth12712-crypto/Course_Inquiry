@@ -15,8 +15,8 @@ import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: "rishabh98980@gmail.com",
+    pass: "ofed rwtb gfwp pxgm",
   },
 });
 
@@ -30,95 +30,110 @@ const transporter = nodemailer.createTransport({
  */
 export const sendConfirmationEmail = async (recipientEmail, name, course) => {
   try {
-    // Validate environment variables
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error('Email credentials not configured. Set EMAIL_USER and EMAIL_PASS in .env');
-    }
+   
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER, 
-      to: recipientEmail,
-      subject: 'Thank You for Your Course Inquiry',
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              line-height: 1.6;
-              color: #333;
-            }
-            .container {
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 20px;
-              background-color: #f9f9f9;
-            }
-            .header {
-              background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-              color: white;
-              padding: 30px;
-              text-align: center;
-              border-radius: 10px 10px 0 0;
-            }
-            .content {
-              background-color: white;
-              padding: 30px;
-              border-radius: 0 0 10px 10px;
-            }
-            .course-info {
-              background-color: #f3f4f6;
-              padding: 15px;
-              border-radius: 8px;
-              margin: 20px 0;
-            }
-            .footer {
-              text-align: center;
-              margin-top: 20px;
-              color: #666;
-              font-size: 12px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>Thank You for Your Interest!</h1>
-            </div>
-            <div class="content">
-              <p>Dear ${name},</p>
+   const mailOptions = {
+  from: "rishabh98980@gmail.com", 
+  to: recipientEmail,
+  subject: 'About Your Pharmacy Assistant Program Inquiry',
+  html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9f9f9;
+        }
+        .header {
+          background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+          color: white;
+          padding: 30px;
+          text-align: center;
+          border-radius: 10px 10px 0 0;
+        }
+        .content {
+          background-color: white;
+          padding: 30px;
+          border-radius: 0 0 10px 10px;
+        }
+        .highlight-box {
+          background-color: #f3f4f6;
+          padding: 15px;
+          border-radius: 8px;
+          margin: 20px 0;
+          border-left: 4px solid #2563eb;
+        }
+        .cta-button {
+          display: inline-block;
+          padding: 12px 30px;
+          background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+          color: white;
+          text-decoration: none;
+          border-radius: 6px;
+          margin: 20px 0;
+          font-weight: bold;
+        }
+        .footer {
+          text-align: center;
+          margin-top: 20px;
+          color: #666;
+          font-size: 12px;
+        }
+        ul {
+          margin: 15px 0;
+          padding-left: 20px;
+        }
+        ul li {
+          margin: 8px 0;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>👋 About Your Program Inquiry</h1>
+        </div>
+        <div class="content">
+          <p>Hi! Hope you're doing well.</p>
 
-              <p>Thank you for submitting your course inquiry. We have received your information and our team will review it shortly.</p>
+          <p>You had shown interest in the <strong>Pharmacy Assistant program</strong>, so I wanted to share a quick overview to help you decide if it's the right fit:</p>
 
-              <div class="course-info">
-                <strong>Course Inquiry:</strong> ${course}
-              </div>
+          <ul>
+            <li>It's a <strong>3-month online program</strong>, so you can study from anywhere in Canada.</li>
+            <li><strong>Designed for beginners</strong> — no previous healthcare experience required.</li>
+            <li>The training focuses on <strong>practical skills</strong> that help you work confidently in a pharmacy setting.</li>
+          </ul>
 
-              <p>Our team is excited to help you get started with your chosen course. We believe this program will be a great fit for your goals.</p>
-
-              <p><strong>What happens next?</strong></p>
-              <ul>
-                <li>Our team will review your inquiry within 24-48 hours</li>
-                <li>We'll contact you to discuss course details and enrollment</li>
-                <li>You'll receive information about schedules and pricing</li>
-              </ul>
-
-              <p>If you have any immediate questions, please don't hesitate to reach out to us.</p>
-
-              <p>We look forward to helping you achieve your educational goals!</p>
-
-              <p>Best regards,<br>
-              <strong>Course Team</strong></p>
-            </div>
-            <div class="footer">
-              <p>This is an automated confirmation email. Please do not reply to this message.</p>
-            </div>
+          <div class="highlight-box">
+            <p style="margin: 5px 0;"><strong>📌 NOC Info:</strong> 33103 — falls under Canada's Healthcare & Social Services category. (This is general info only.)</p>
+            <p style="margin: 5px 0;"><strong>⚠️ Important:</strong> For anything related to immigration pathways, please connect with a licensed immigration consultant or lawyer.</p>
           </div>
-        </body>
-        </html>
-      `,
-    };
+
+          <p>If you'd like, I can help you schedule a short call to go over details and answer questions.</p>
+
+          <p><strong>Just reply: "Yes"</strong></p>
+
+          <p>Looking forward to hearing from you!</p>
+
+          <p>Best regards,<br>
+          <strong>Course Team</strong></p>
+        </div>
+        <div class="footer">
+          <p>This email was sent in response to your course inquiry.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+};
 
     const info = await transporter.sendMail(mailOptions);
     console.log('✓ Email sent successfully:', info.messageId, 'to', recipientEmail);
@@ -132,11 +147,9 @@ export const sendConfirmationEmail = async (recipientEmail, name, course) => {
 
 export const sendThankYouEmail = async (recipientEmail, name, course) => {
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error('Email credentials not configured. Set EMAIL_USER and EMAIL_PASS in .env');
-    }
+  
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from:"rishabh98980@gmail.com",
       to: recipientEmail,
       subject: 'Your Course Inquiry Has Been Reviewed',
       html: `
