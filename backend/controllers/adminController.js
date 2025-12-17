@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
 import Admin from '../models/Admin.js';
 import FormSubmission from '../models/FormSubmission.js';
+import { sendThankYouEmail } from '../services/emailService.js';
 
 export const adminLogin = async (req, res, next) => {
   try {
@@ -60,22 +61,101 @@ export const getAllForms = async (req, res, next) => {
 };
 
 /**
- * Mark Form as Read
+ * Mark Form as Read & Send Thank You Email
  *
  * PRODUCTION LOGIC:
- * - Only updates the isRead flag
- * - NO email sending (emails are sent on form submission)
- * - NO scheduling (not compatible with Vercel serverless)
- * - Clean, simple, stateless operation
+ * 1. Update isRead flag with audit info (readAt, readBy)
+ * 2. Send Thank You email (only once - prevents duplicates)
+ * 3. Track email sent status
  */
 export const markAsRead = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // Update the isRead flag
+    // First, fetch the form to check current state
+    const existingForm = await FormSubmission.findById(id);
+
+    if (!existingForm) {
+      return res.status(404).json({
+        success: false,
+        message: 'Form not found',
+      });
+    }
+
+    // Prevent duplicate processing
+    if (existingForm.isRead && existingForm.thankYouEmailSent) {
+      return res.status(200).json({
+        success: true,
+        message: 'Form already processed',
+        data: existingForm,
+        emailSent: false,
+        alreadyProcessed: true,
+      });
+    }
+
+    // Update form with read status and audit info
+    const updateData = {
+      isRead: true,
+      readAt: new Date(),
+      readBy: 'admin', // Could be enhanced to use actual admin username from token
+    };
+
+    let emailSent = false;
+    let emailError = null;
+
+    // Send Thank You email only if not already sent
+    if (!existingForm.thankYouEmailSent) {
+      try {
+        await sendThankYouEmail(
+          existingForm.email,
+          existingForm.name,
+          existingForm.course
+        );
+        updateData.thankYouEmailSent = true;
+        updateData.thankYouEmailSentAt = new Date();
+        emailSent = true;
+        console.log('Thank You email sent to:', existingForm.email);
+      } catch (err) {
+        // Log error but don't fail the request
+        console.error('Failed to send Thank You email:', err.message);
+        emailError = err.message;
+      }
+    }
+
+    // Update the form in database
     const form = await FormSubmission.findByIdAndUpdate(
       id,
-      { isRead: true },
+      updateData,
+      { new: true }
+    );
+
+    console.log('Form marked as read:', id);
+
+    res.json({
+      success: true,
+      message: emailSent
+        ? 'Form marked as read and Thank You email sent'
+        : 'Form marked as read',
+      data: form,
+      emailSent,
+      emailError,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Update Admin Notes for a submission
+ */
+export const updateAdminNotes = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { adminNotes } = req.body;
+
+    const form = await FormSubmission.findByIdAndUpdate(
+      id,
+      { adminNotes },
       { new: true }
     );
 
@@ -86,14 +166,20 @@ export const markAsRead = async (req, res, next) => {
       });
     }
 
-    console.log('✓ Form marked as read:', id);
-
     res.json({
       success: true,
-      message: 'Form marked as read',
+      message: 'Admin notes updated',
       data: form,
     });
   } catch (error) {
     next(error);
   }
 };
+
+
+
+
+
+
+
+

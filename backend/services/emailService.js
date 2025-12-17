@@ -36,7 +36,7 @@ export const sendConfirmationEmail = async (recipientEmail, name, course) => {
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_USER, // Fixed: removed duplicate @gmail.com
+      from: process.env.EMAIL_USER, 
       to: recipientEmail,
       subject: 'Thank You for Your Course Inquiry',
       html: `
@@ -126,6 +126,110 @@ export const sendConfirmationEmail = async (recipientEmail, name, course) => {
   } catch (error) {
     // Log the error but don't crash - email failures shouldn't block form submission
     console.error('✗ Error sending email:', error.message);
+    throw error;
+  }
+};
+
+export const sendThankYouEmail = async (recipientEmail, name, course) => {
+  try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error('Email credentials not configured. Set EMAIL_USER and EMAIL_PASS in .env');
+    }
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: recipientEmail,
+      subject: 'Your Course Inquiry Has Been Reviewed',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              line-height: 1.6;
+              color: #333;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #f9f9f9;
+            }
+            .header {
+              background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+              color: white;
+              padding: 30px;
+              text-align: center;
+              border-radius: 10px 10px 0 0;
+            }
+            .content {
+              background-color: white;
+              padding: 30px;
+              border-radius: 0 0 10px 10px;
+            }
+            .highlight-box {
+              background-color: #ecfdf5;
+              border-left: 4px solid #10b981;
+              padding: 15px;
+              margin: 20px 0;
+            }
+            .course-info {
+              background-color: #f3f4f6;
+              padding: 15px;
+              border-radius: 8px;
+              margin: 20px 0;
+            }
+            .footer {
+              text-align: center;
+              margin-top: 20px;
+              color: #666;
+              font-size: 12px;
+            }
+            .check-icon {
+              font-size: 48px;
+              margin-bottom: 10px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <div class="check-icon">&#10003;</div>
+              <h1>Your Inquiry Has Been Reviewed!</h1>
+            </div>
+            <div class="content">
+              <p>Dear ${name},</p>
+              <div class="highlight-box">
+                <strong>Great news!</strong> Our team has reviewed your course inquiry and we're excited to help you get started.
+              </div>
+              <div class="course-info">
+                <strong>Course of Interest:</strong> ${course}
+              </div>
+              <p><strong>What happens next?</strong></p>
+              <ul>
+                <li>A team member will contact you within 24-48 hours</li>
+                <li>We'll discuss course details, schedules, and pricing</li>
+                <li>We'll answer any questions you may have</li>
+                <li>We'll guide you through the enrollment process</li>
+              </ul>
+              <p>We appreciate your interest in our courses and look forward to helping you achieve your educational goals!</p>
+              <p>If you have any immediate questions, please don't hesitate to reach out.</p>
+              <p>Best regards,<br>
+              <strong>Course Team</strong></p>
+            </div>
+            <div class="footer">
+              <p>This is an automated email. Please do not reply to this message.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    };
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Thank You email sent successfully:', info.messageId, 'to', recipientEmail);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('Error sending Thank You email:', error.message);
     throw error;
   }
 };

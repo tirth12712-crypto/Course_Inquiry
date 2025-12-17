@@ -25,14 +25,34 @@ const formSubmissionSchema = new mongoose.Schema(
     isRead: {
       type: Boolean,
       default: false,
-    },followUpAt: {
-  type: Date,
-},
-followUpSent: {
-  type: Boolean,
-  default: false,
-},
-
+    },
+    readAt: {
+      type: Date,
+      default: null,
+    },
+    readBy: {
+      type: String,
+      default: null,
+    },
+    thankYouEmailSent: {
+      type: Boolean,
+      default: false,
+    },
+    thankYouEmailSentAt: {
+      type: Date,
+      default: null,
+    },
+    adminNotes: {
+      type: String,
+      default: '',
+    },
+    followUpAt: {
+      type: Date,
+    },
+    followUpSent: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

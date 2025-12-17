@@ -30,4 +30,10 @@ export const markFormAsRead = async (id) => {
   return apiClient.put(`/admin/forms/${id}/read`);
 };
 
+export const updateAdminNotes = async (id, adminNotes) => {
+  return apiClient.put(`/admin/forms/${id}/notes`, { adminNotes });
+};
+
 export default apiClient;
+
+
