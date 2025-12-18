@@ -15,11 +15,15 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "^/api/(.*)$",
       "dest": "backend/server.js"
     },
     {
-      "src": "/(.*)",
+      "src": "^/(assets|favicon.ico|robots.txt|manifest.webmanifest)/(.*)$",
+      "dest": "/$1/$2"
+    },
+    {
+      "src": "^/(.*)$",
       "dest": "/index.html"
     }
   ]
