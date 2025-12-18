@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
-
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: '/api'
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -14,26 +12,19 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-export const submitForm = async (formData) => {
-  return apiClient.post('/forms/submit', formData);
-};
+export const submitForm = (formData) =>
+  apiClient.post('/forms/submit', formData);
 
-export const adminLogin = async (username, password) => {
-  return apiClient.post('/admin/login', { username, password });
-};
+export const adminLogin = (username, password) =>
+  apiClient.post('/admin/login', { username, password });
 
-export const getAllForms = async () => {
-  return apiClient.get('/admin/forms');
-};
+export const getAllForms = () =>
+  apiClient.get('/admin/forms');
 
-export const markFormAsRead = async (id) => {
-  return apiClient.put(`/admin/forms/${id}/read`);
-};
+export const markFormAsRead = (id) =>
+  apiClient.put(`/admin/forms/${id}/read`);
 
-export const updateAdminNotes = async (id, adminNotes) => {
-  return apiClient.put(`/admin/forms/${id}/notes`, { adminNotes });
-};
+export const updateAdminNotes = (id, adminNotes) =>
+  apiClient.put(`/admin/forms/${id}/notes`, { adminNotes });
 
 export default apiClient;
-
-

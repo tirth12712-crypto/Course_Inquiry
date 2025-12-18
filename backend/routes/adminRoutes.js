@@ -1,5 +1,10 @@
 import express from 'express';
-import { adminLogin, getAllForms, markAsRead, updateAdminNotes } from '../controllers/adminController.js';
+import {
+  adminLogin,
+  getAllForms,
+  markAsRead,
+  updateAdminNotes
+} from '../controllers/adminController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
