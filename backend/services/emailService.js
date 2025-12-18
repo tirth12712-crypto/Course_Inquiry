@@ -15,8 +15,8 @@ import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: "rishabh98980@gmail.com",
-    pass: "ofed rwtb gfwp pxgm",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -33,7 +33,7 @@ export const sendConfirmationEmail = async (recipientEmail, name, course) => {
    
 
    const mailOptions = {
-  from: "rishabh98980@gmail.com", 
+  from: process.env.EMAIL_USER, 
   to: recipientEmail,
   subject: 'About Your Pharmacy Assistant Program Inquiry',
   html: `

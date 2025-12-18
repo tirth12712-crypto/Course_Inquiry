@@ -33,7 +33,7 @@ export const adminLogin = async (req, res, next) => {
       });
     }
 
-    const token = jwt.sign({ id: admin._id }, "imbatman", {
+    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
       expiresIn: '24h',
     });
 
